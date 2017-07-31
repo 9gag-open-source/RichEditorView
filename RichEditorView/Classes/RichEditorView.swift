@@ -74,6 +74,19 @@ open class RichEditorView: UIView, UIScrollViewDelegate, UIWebViewDelegate, UIGe
             delegate?.richEditor?(self, contentDidChange: contentHTML)
         }
     }
+    
+    open var shouldScrollCaretToVisibleOnChange = true
+    
+    open var caretRect: CGRect {
+        get {
+            let scrollView = self.webView.scrollView
+            // XXX: Maybe find a better way to get the cursor height
+            let lineHeight = CGFloat(self.lineHeight)
+            let cursorHeight = lineHeight - 4
+            let visiblePosition = CGFloat(relativeCaretYPosition)
+            return CGRect(x: scrollView.contentOffset.x, y: visiblePosition, width: 1, height: cursorHeight)
+        }
+    }
 
     /// The internal height of the text being displayed.
     /// Is continually being updated as the text is edited.
@@ -454,6 +467,9 @@ open class RichEditorView: UIView, UIScrollViewDelegate, UIWebViewDelegate, UIGe
     /// Called repeatedly to make sure the caret is always visible when inputting text.
     /// Works only if the `lineHeight` of the editor is available.
     private func scrollCaretToVisible() {
+        guard shouldScrollCaretToVisibleOnChange else {
+            return
+        }
         let scrollView = self.webView.scrollView
         
         let contentHeight = clientHeight > 0 ? CGFloat(clientHeight) : scrollView.frame.height
