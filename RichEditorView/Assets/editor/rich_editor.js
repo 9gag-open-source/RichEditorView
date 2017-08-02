@@ -133,6 +133,10 @@ RE.setFontSize = function(size) {
     RE.editor.style.fontSize = size;
 };
 
+RE.getBackgroundColor = function() {
+    return RE.editor.style.backgroundColor;
+};
+
 RE.setBackgroundColor = function(color) {
     RE.editor.style.backgroundColor = color;
 };
@@ -171,6 +175,10 @@ RE.setStrikeThrough = function() {
 
 RE.setUnderline = function() {
     document.execCommand('underline', false, null);
+};
+
+RE.getTextColor = function() {
+    return document.queryCommandValue("foreColor");
 };
 
 RE.setTextColor = function(color) {

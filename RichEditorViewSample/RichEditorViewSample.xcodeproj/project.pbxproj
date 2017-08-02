@@ -213,12 +213,12 @@
 				TargetAttributes = {
 					39BBCFA91AD0CC7A00A450D2 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = XATA46WWFJ;
+						DevelopmentTeam = 3X53CJD4HG;
 						LastSwiftMigration = 0800;
 					};
 					39BBCFBE1AD0CC7A00A450D2 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = XATA46WWFJ;
+						DevelopmentTeam = 3X53CJD4HG;
 						LastSwiftMigration = 0800;
 						TestTargetID = 39BBCFA91AD0CC7A00A450D2;
 					};
@@ -454,7 +454,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = XATA46WWFJ;
+				DEVELOPMENT_TEAM = 3X53CJD4HG;
 				INFOPLIST_FILE = RichEditorViewSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cjwirth.$(PRODUCT_NAME:rfc1034identifier)";
@@ -471,7 +471,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = XATA46WWFJ;
+				DEVELOPMENT_TEAM = 3X53CJD4HG;
 				INFOPLIST_FILE = RichEditorViewSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cjwirth.$(PRODUCT_NAME:rfc1034identifier)";
@@ -485,7 +485,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = XATA46WWFJ;
+				DEVELOPMENT_TEAM = 3X53CJD4HG;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -502,7 +502,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = XATA46WWFJ;
+				DEVELOPMENT_TEAM = 3X53CJD4HG;
 				INFOPLIST_FILE = RichEditorViewSampleTests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cjwirth.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

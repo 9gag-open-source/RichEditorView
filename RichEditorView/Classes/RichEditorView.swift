@@ -116,6 +116,9 @@ open class RichEditorView: UIView, UIScrollViewDelegate, UIWebViewDelegate, UIGe
 
     // MARK: Private Properties
 
+    private var textColorLoaded = false
+    private var initialTextColor: UIColor = .white
+    
     /// Whether or not the editor has finished loading or not yet.
     private var isEditorLoaded = false
 
@@ -236,6 +239,30 @@ open class RichEditorView: UIView, UIScrollViewDelegate, UIWebViewDelegate, UIGe
         return runJS("RE.rangeOrCaretSelectionExists();") == "true" ? true : false
     }
 
+    public var editorBackgroundColor: UIColor {
+        get {
+            return UIColor.rgbStringToUIColor(rgbString: runJS("RE.getBackgroundColor();"))
+        }
+        set {
+            runJS("RE.setBackgroundColor('\(newValue.hex)');")
+        }
+    }
+    
+    public var textColor: UIColor {
+        get {
+            if textColorLoaded {
+                return UIColor.rgbStringToUIColor(rgbString: runJS("RE.getTextColor();"))
+            } else {
+                return initialTextColor
+            }
+        }
+        set {
+            initialTextColor = newValue
+            runJS("RE.prepareInsert();")
+            runJS("RE.setTextColor('\(newValue.hex)');")
+        }
+    }
+    
     // MARK: Methods
 
     public func removeFormat() {
@@ -244,10 +271,6 @@ open class RichEditorView: UIView, UIScrollViewDelegate, UIWebViewDelegate, UIGe
     
     public func setFontSize(_ size: Int) {
         runJS("RE.setFontSize('\(size)px');")
-    }
-    
-    public func setEditorBackgroundColor(_ color: UIColor) {
-        runJS("RE.setBackgroundColor('\(color.hex)');")
     }
     
     public func undo() {
@@ -281,11 +304,6 @@ open class RichEditorView: UIView, UIScrollViewDelegate, UIWebViewDelegate, UIGe
     
     public func underline() {
         runJS("RE.setUnderline();")
-    }
-    
-    public func setTextColor(_ color: UIColor) {
-        runJS("RE.prepareInsert();")
-        runJS("RE.setTextColor('\(color.hex)');")
     }
     
     public func setTextBackgroundColor(_ color: UIColor) {
@@ -501,6 +519,7 @@ open class RichEditorView: UIView, UIScrollViewDelegate, UIWebViewDelegate, UIGe
     /// Called when actions are received from JavaScript
     /// - parameter method: String with the name of the method and optional parameters that were passed in
     private func performCommand(_ method: String) {
+        
         if method.hasPrefix("ready") {
             // If loading for the first time, we have to set the content HTML to be displayed
             if !isEditorLoaded {
@@ -523,6 +542,10 @@ open class RichEditorView: UIView, UIScrollViewDelegate, UIWebViewDelegate, UIGe
             updateHeight()
         }
         else if method.hasPrefix("focus") {
+            if !textColorLoaded {
+                textColorLoaded = true
+                self.textColor = initialTextColor
+            }
             delegate?.richEditorTookFocus?(self)
         }
         else if method.hasPrefix("blur") {

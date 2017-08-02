@@ -25,5 +25,20 @@ internal extension UIColor {
         let str = String(format: "#%02x%02x%02x", r, g, b)
         return str
     }
+    
+    static func rgbStringToUIColor(rgbString:String) -> UIColor {
+        let scanner = Scanner(string: rgbString)
+        var junk, red, green, blue: NSString?
+        scanner.scanUpToCharacters(from: CharacterSet.decimalDigits, into: &junk)
+        scanner.scanUpToCharacters(from: CharacterSet.punctuationCharacters, into: &red)
+        scanner.scanUpToCharacters(from: CharacterSet.decimalDigits, into: &junk)
+        scanner.scanUpToCharacters(from: CharacterSet.punctuationCharacters, into: &green)
+        scanner.scanUpToCharacters(from: CharacterSet.decimalDigits, into: &junk)
+        scanner.scanUpToCharacters(from: CharacterSet.punctuationCharacters, into: &blue)
+        guard let _red = red, let _green = green, let _blue = blue else {
+            return UIColor.clear
+        }
+        return UIColor(red: CGFloat(_red.floatValue/255.0), green: CGFloat(_green.floatValue/255.0), blue: CGFloat(_blue.floatValue/255.0), alpha: 1.0)
+    }
 
 }

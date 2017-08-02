@@ -47,6 +47,28 @@ open class RichBarButtonItem: UIBarButtonItem {
     }
 }
 
+open class RichButton: UIButton {
+    open var actionHandler: ((Void) -> Void)?
+    
+    public convenience init(image: UIImage? = nil, handler: ((Void) -> Void)? = nil) {
+        self.init()
+        setImage(image, for: .normal)
+        addTarget(self, action: #selector(RichButton.buttonWasTapped), for: .touchUpInside)
+        actionHandler = handler
+    }
+    
+    public convenience init(title: String = "", handler: ((Void) -> Void)? = nil) {
+        self.init()
+        setTitle(title, for: .normal)
+        addTarget(self, action: #selector(RichButton.buttonWasTapped), for: .touchUpInside)
+        actionHandler = handler
+    }
+    
+    func buttonWasTapped() {
+        actionHandler?()
+    }
+}
+
 /// RichEditorToolbar is UIView that contains the toolbar for actions that can be performed on a RichEditorView
 open class RichEditorToolbar: UIView {
 
@@ -64,19 +86,17 @@ open class RichEditorToolbar: UIView {
     }
 
     /// The tint color to apply to the toolbar background.
-    open var barTintColor: UIColor? {
-        get { return backgroundToolbar.barTintColor }
-        set { backgroundToolbar.barTintColor = newValue }
-    }
+//    open var barTintColor: UIColor? {
+//        get { return backgroundToolbar.barTintColor }
+//        set { backgroundToolbar.barTintColor = newValue }
+//    }
 
     private var toolbarScroll: UIScrollView
-    private var toolbar: UIToolbar
-    private var backgroundToolbar: UIToolbar
+    private var toolbar: UIView
     
     public override init(frame: CGRect) {
         toolbarScroll = UIScrollView()
-        toolbar = UIToolbar()
-        backgroundToolbar = UIToolbar()
+        toolbar = UIView()
         super.init(frame: frame)
         setup()
     }
@@ -84,7 +104,6 @@ open class RichEditorToolbar: UIView {
     public required init?(coder aDecoder: NSCoder) {
         toolbarScroll = UIScrollView()
         toolbar = UIToolbar()
-        backgroundToolbar = UIToolbar()
         super.init(coder: aDecoder)
         setup()
     }
@@ -92,14 +111,9 @@ open class RichEditorToolbar: UIView {
     private func setup() {
         autoresizingMask = .flexibleWidth
         backgroundColor = .clear
-
-        backgroundToolbar.frame = bounds
-        backgroundToolbar.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-
+        
         toolbar.autoresizingMask = .flexibleWidth
         toolbar.backgroundColor = .clear
-        toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
-        toolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
 
         toolbarScroll.frame = bounds
         toolbarScroll.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -108,14 +122,16 @@ open class RichEditorToolbar: UIView {
         toolbarScroll.backgroundColor = .clear
 
         toolbarScroll.addSubview(toolbar)
-
-        addSubview(backgroundToolbar)
+        
         addSubview(toolbarScroll)
         updateToolbar()
     }
     
     private func updateToolbar() {
-        var buttons = [UIBarButtonItem]()
+        
+        toolbar.subviews.forEach { $0.removeFromSuperview() }
+        
+        var buttons = [UIButton]()
         for option in options {
             let handler = { [weak self] in
                 if let strongSelf = self {
@@ -124,33 +140,27 @@ open class RichEditorToolbar: UIView {
             }
 
             if let image = option.image {
-                let button = RichBarButtonItem(image: image, handler: handler)
+                let button = RichButton(image: image, handler: handler)
+                button.tintColor = option.tintColor
                 buttons.append(button)
             } else {
                 let title = option.title
-                let button = RichBarButtonItem(title: title, handler: handler)
+                let button = RichButton(title: title, handler: handler)
+                button.tintColor = option.tintColor
                 buttons.append(button)
             }
         }
-        toolbar.items = buttons
-
-        let defaultIconWidth: CGFloat = 22
-        let barButtonItemMargin: CGFloat = 11
-        let width: CGFloat = buttons.reduce(0) {sofar, new in
-            if let view = new.value(forKey: "view") as? UIView {
-                return sofar + view.frame.size.width + barButtonItemMargin
-            } else {
-                return sofar + (defaultIconWidth + barButtonItemMargin)
-            }
+        
+        let width = 44
+        let height = 44
+        let totalWidth = buttons.count * width
+        for (index, element) in buttons.enumerated() {
+            toolbar.addSubview(element)
+            element.frame = CGRect(x: index * width, y: 0, width: width, height: height)
         }
         
-        if width < frame.size.width {
-            toolbar.frame.size.width = frame.size.width
-        } else {
-            toolbar.frame.size.width = width
-        }
-        toolbar.frame.size.height = 44
-        toolbarScroll.contentSize.width = width
+        toolbar.frame.size = CGSize(width: totalWidth, height: height)
+        toolbarScroll.contentSize = toolbar.frame.size
     }
     
 }

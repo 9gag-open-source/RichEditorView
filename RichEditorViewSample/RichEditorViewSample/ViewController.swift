@@ -71,7 +71,7 @@ extension ViewController: RichEditorToolbarDelegate {
 
     func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar) {
         let color = randomColor()
-        toolbar.editor?.setTextColor(color)
+        toolbar.editor?.textColor = color
     }
 
     func richEditorToolbarChangeBackgroundColor(_ toolbar: RichEditorToolbar) {
