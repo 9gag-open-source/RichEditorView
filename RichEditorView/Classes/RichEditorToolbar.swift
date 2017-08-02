@@ -140,13 +140,13 @@ open class RichEditorToolbar: UIView {
             }
 
             if let image = option.image {
-                let button = RichButton(image: image, handler: handler)
-                button.tintColor = option.tintColor
+                let button = RichButton(image: image.withRenderingMode(.alwaysTemplate), handler: handler)
+                button.tintColor = option.tintColor != nil ? option.tintColor : self.tintColor
                 buttons.append(button)
             } else {
                 let title = option.title
                 let button = RichButton(title: title, handler: handler)
-                button.tintColor = option.tintColor
+                button.tintColor = option.tintColor != nil ? option.tintColor : self.tintColor
                 buttons.append(button)
             }
         }
